@@ -1,0 +1,14 @@
+#version 400
+in vec3 position;
+out vec2 pos;
+
+uniform mat3 model;
+uniform mat4 View;
+uniform mat4 projection;
+
+void main()
+{
+  vec4 new_position = vec4(position.y*200, 0, position.x*200, 1);
+  gl_Position = projection * View * new_position;
+  pos = new_position.xz/2+0.5;
+}

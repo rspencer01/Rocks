@@ -1,0 +1,95 @@
+#version 410
+layout(location=0) out vec4 fragmentColor;
+layout(location=1) out vec4 fragmentNorm;
+layout(location=2) out vec4 fragmentPos;
+
+in VertexData
+{
+  vec4 position;
+  vec4 normal;
+} VertexOut;
+
+uniform vec3 sunDirection = normalize(vec3(0,1,1));
+uniform vec3 CameraPosition;
+
+#include shaders/includes/simplex.sh;
+#include shaders/includes/shadows.shd;
+
+uniform vec3 uAColor = vec3(0.50, 0.40, 0.30);
+uniform vec3 uBColor = vec3(0.60, 0.45, 0.37);
+uniform vec3 uCColor = vec3(0.71, 0.66, 0.59);
+
+float noise(vec3 s) {
+    return snoise(s) * 0.5 + 0.5;
+}
+
+float fbm( vec3 p, int n, float persistence) {
+
+    float v = 0.0;
+    float total = (1-pow(persistence,n))/(1-persistence);
+    float amplitude = 1.0;
+
+    for(int i = 0 ; i < n; ++i) {
+        v += amplitude * noise(p);
+
+        amplitude  *= persistence;
+        p *= 2.0; // double freq.
+    }
+
+    return v / total;
+}
+
+vec3 samplePalette(float t) {
+    if(t < 0.25) {
+        return uAColor;
+    } else if(t > 0.25 && t <0.5) {
+        return mix(uAColor, uBColor,  (t-0.25) /0.25 );
+    }else{
+        return mix(uBColor, uCColor,  (t-0.5) /0.5 );
+    }
+}
+
+float ridge( vec3 p, int n, float persistence) {
+
+    float v = 0.0;
+    float total = (1-pow(persistence,n))/(1-persistence);
+    float amplitude = 1.0;
+
+    for(int i = 0 ; i < n; ++i) {
+
+        float signal = (1.0 - abs(  snoise(p) )  );
+        signal = pow(signal, 8.0);
+
+        v += amplitude * signal;
+
+        amplitude  *= persistence;
+        p *= 2.0; // double freq.
+
+    }
+    return v / total;
+}
+
+
+void main()
+{
+
+  float t= fbm(VertexOut.position.xyz*4, 5,0.8);
+  // add rock color.
+  vec3 diff = samplePalette(t);
+
+  vec3 ss = VertexOut.position.xyz;
+  ss.xz/=3;
+
+  float f = ridge(vec3(4.0)*ss, 5, 0.8);
+
+  float t1 = ridge(vec3(4.0)*ss, 5, 0.8);
+  float t2 = ridge(vec3(4.0)*(ss+vec3(4343.3)), 4, 0.8);
+
+  // add cracks.
+  diff += 0.4*t1;
+  diff -= 0.4*t2;
+
+  fragmentColor = vec4(diff,1);
+  fragmentNorm = vec4(VertexOut.normal.rgb,1);
+  fragmentPos = VertexOut.position;
+}

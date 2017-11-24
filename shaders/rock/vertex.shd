@@ -1,0 +1,21 @@
+#version 410
+in vec3 position;
+in vec3 normal;
+
+out VertexData
+{
+  vec4 position;
+  vec4 normal;
+} VertexOut;
+
+uniform mat4 View;
+uniform mat4 projection;
+in mat4 model;
+
+void main()
+{
+  VertexOut.position = model*vec4(position,1.0);
+  VertexOut.normal = inverse(transpose(model))*vec4(normal,0.0);
+
+  gl_Position = projection * View * VertexOut.position;
+}
