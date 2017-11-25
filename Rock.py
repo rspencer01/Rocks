@@ -12,7 +12,7 @@ class Rock(object):
 
     self.shader = shader
 
-    self.meshdata, self.meshindices = procgen.Rock.get_rock_mesh()
+    self.meshdata, self.meshindices = procgen.Rock.get_rock_mesh(1)
 
     self.instances = np.zeros(0, dtype=[("model", np.float32, (4, 4))])
 

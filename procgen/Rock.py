@@ -78,25 +78,26 @@ def smooth(vertices, indices):
     vertices[indices[i*3+1]] = vertices[indices[i*3+1]]*.9+m*.1
     vertices[indices[i*3+2]] = vertices[indices[i*3+2]]*.9+m*.1
 
-def get_rock_mesh():
-    verts, I = dent.assets.getAsset('tetrahedron', make_tetrahedron, (10,), True)
+def get_rock_mesh(seed=None):
+  np.random.seed(seed)
+  verts, I = dent.assets.getAsset('tetrahedron', make_tetrahedron, (10,), True)
 
-    data = np.zeros(len(verts), dtype=[("position", np.float32, 3),
-                                       ("normal", np.float32, 3)])
-    data['position'] = verts
+  data = np.zeros(len(verts), dtype=[("position", np.float32, 3),
+                                     ("normal", np.float32, 3)])
+  data['position'] = verts
 
-    for i in xrange(len(data)):
-      data['position'][i] /= np.linalg.norm(data['position'][i])
+  for i in xrange(len(data)):
+    data['position'][i] /= np.linalg.norm(data['position'][i])
 
-    disturb(data['position'],0.1)
-    for i in xrange(len(data)):
-      data['position'][i][0] *= 1.2
-      data['position'][i][2] *= 1.5
-    for i in xrange(5):
-      slice_off(data['position'])
-    smooth(data['position'],I)
-    crackle(data['position'],0.01,2)
-    disturb(data['position'],0.02,4)
+  disturb(data['position'],0.1)
+  for i in xrange(len(data)):
+    data['position'][i][0] *= 1.2
+    data['position'][i][2] *= 1.5
+  for i in xrange(5):
+    slice_off(data['position'])
+  smooth(data['position'],I)
+  crackle(data['position'],0.01,2)
+  disturb(data['position'],0.02,4)
 
-    utils.make_normals(data, I)
-    return data, np.array(I, dtype=np.int32)
+  utils.make_normals(data, I)
+  return data, np.array(I, dtype=np.int32)
