@@ -1,0 +1,13 @@
+#version 400 core
+in int id;
+out vec2 geoValue;
+
+uniform int scan = 10;
+uniform vec2 centre = vec2(0);
+
+void main()
+{
+  vec2 rcentre = round(centre/3)*3;
+  geoValue = vec2(id%scan - scan/2. + 0.5,
+                  id/scan - scan/2. + 0.5)*3+rcentre;
+}

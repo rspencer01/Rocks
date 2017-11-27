@@ -78,9 +78,9 @@ def smooth(vertices, indices):
     vertices[indices[i*3+1]] = vertices[indices[i*3+1]]*.9+m*.1
     vertices[indices[i*3+2]] = vertices[indices[i*3+2]]*.9+m*.1
 
-def get_rock_mesh(seed=None):
+def get_rock_mesh(seed=None, detail=20):
   np.random.seed(seed)
-  verts, I = dent.assets.getAsset('tetrahedron', make_tetrahedron, (10,), True)
+  verts, I = dent.assets.getAsset('tetrahedron'+str(detail), make_tetrahedron, (detail,), False)
 
   data = np.zeros(len(verts), dtype=[("position", np.float32, 3),
                                      ("normal", np.float32, 3)])
@@ -98,6 +98,7 @@ def get_rock_mesh(seed=None):
   smooth(data['position'],I)
   crackle(data['position'],0.01,2)
   disturb(data['position'],0.02,4)
+  disturb(data['position'],0.01,12)
 
   utils.make_normals(data, I)
   return data, np.array(I, dtype=np.int32)

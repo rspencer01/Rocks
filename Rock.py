@@ -7,31 +7,23 @@ import OpenGL.GL as gl
 shader = Shaders.getShader('rock', instance=True)
 
 class Rock(object):
-  def __init__(self):
+  def __init__(self, instance_buffer, instance_count, detail):
     self.position = np.array([0,0.5,0],dtype=float)
 
     self.shader = shader
 
-    self.meshdata, self.meshindices = procgen.Rock.get_rock_mesh(1)
+    self.meshdata, self.meshindices = procgen.Rock.get_rock_mesh(1,detail)
 
-    self.instances = np.zeros(0, dtype=[("model", np.float32, (4, 4))])
+    self.instance_template = np.zeros(0, dtype=[("model", np.float32, (4, 4))])
 
-    self.renderID = None
-
-
-  def addInstances(self, model):
-    t = np.zeros(1, dtype=[("model", np.float32, (4, 4))])
-    t[0] = model
-    self.instances = np.append(self.instances, t)
-
-
-  def freeze(self):
     self.renderID = self.shader.setData(self.meshdata,
                                         self.meshindices,
-                                        self.instances)
+                                        self.instance_template,
+                                        instance_buffer)
+    self.instance_count = instance_count
 
 
   def display(self):
     if self.renderID is None:
       return
-    self.shader.draw(gl.GL_TRIANGLES, self.renderID, len(self.instances))
+    self.shader.draw(gl.GL_TRIANGLES, self.renderID, self.instance_count)

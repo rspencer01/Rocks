@@ -12,7 +12,7 @@ in VertexData
 uniform vec3 sunDirection = normalize(vec3(0,1,1));
 uniform vec3 CameraPosition;
 
-#include shaders/includes/simplex.sh;
+#include shaders/includes/simplex.shd;
 #include shaders/includes/shadows.shd;
 
 uniform vec3 uAColor = vec3(0.50, 0.40, 0.30);

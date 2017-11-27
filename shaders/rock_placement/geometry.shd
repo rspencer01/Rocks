@@ -1,0 +1,59 @@
+#version 400 core
+layout(points) in;
+layout(points, max_vertices=1) out;
+
+in vec2[] geoValue;
+out mat4 outValue;
+
+uniform int lodlevel;
+uniform vec2 centre = vec2(0);
+
+#include shaders/includes/simplex.shd;
+#include shaders/includes/transforms.shd;
+
+float rand(vec2 co){
+    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+}
+
+bool should_make()
+{
+  vec2 rcentre = round(centre/3)*3;
+  if (lodlevel==1)
+  {
+    if (abs(geoValue[0].x-rcentre.x)<3*3/2+1 &&
+        abs(geoValue[0].y-rcentre.y)<3*3/2+1)
+      return false;
+    return true;
+  }
+  if (lodlevel==2)
+  {
+    if (abs(geoValue[0].x-rcentre.x)<3*9/2+1 &&
+        abs(geoValue[0].y-rcentre.y)<3*9/2+1)
+      return false;
+    return true;
+  }
+  if (lodlevel==3)
+  {
+    if (abs(geoValue[0].x-rcentre.x)<3*21/2+1 &&
+        abs(geoValue[0].y-rcentre.y)<3*21/2+1)
+      return false;
+    return true;
+  }
+  return true;
+}
+
+void main()
+{
+  if (!should_make()) return;
+  outValue = rotate_and_translate(
+    vec3(geoValue[0].x + 3*rand(geoValue[0]*100+vec2(0.3,0.4)),
+         rand(geoValue[0]*100)-0.5,
+         geoValue[0].y + 3*rand(geoValue[0]*100+vec2(0.3,0.5))),
+    vec3(
+         (rand(geoValue[0]*100)-0.5)*20,
+         (rand(geoValue[0]*100)-0.5)*20,
+         (rand(geoValue[0]*100)-0.5)*20
+        ));
+  EmitVertex();
+  EndPrimitive();
+}
