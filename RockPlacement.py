@@ -5,6 +5,7 @@ import numpy as np
 
 transform_shader = Shaders.TransformFeedbackShader('rock_placement_feedback')
 transform_shader.addProgram(gl.GL_VERTEX_SHADER, Shaders.ShaderFile('shaders/rock_placement/vertex.shd', gl.GL_VERTEX_SHADER))
+Shaders.shaders['rock_placement_feedback'] = transform_shader
 transform_shader.addProgram(gl.GL_GEOMETRY_SHADER, Shaders.ShaderFile('shaders/rock_placement/geometry.shd',gl.GL_GEOMETRY_SHADER))
 transform_shader.addOutput('outValue')
 
