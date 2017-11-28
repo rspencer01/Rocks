@@ -82,7 +82,7 @@ void main()
 
   float f = ridge(vec3(4.0)*ss, 5, 0.8);
 
-  float t1 = ridge(vec3(4.0)*ss, 5, 0.8);
+  float t1 = ridge(vec3(8.0)*ss, 4, 0.8);
   float t2 = ridge(vec3(4.0)*(ss+vec3(4343.3)), 4, 0.8);
 
   // add cracks.

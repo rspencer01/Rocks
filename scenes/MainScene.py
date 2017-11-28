@@ -28,7 +28,7 @@ class MainScene(Scene):
     self.rock_lod_0 = Rock.Rock(RockPlacement.output_buffers[0], 9,35)
     self.rock_lod_1 = Rock.Rock(RockPlacement.output_buffers[1], 81,14)
     self.rock_lod_2 = Rock.Rock(RockPlacement.output_buffers[2], 400,7)
-    self.rock_lod_3 = Rock.Rock(RockPlacement.output_buffers[3], 51*51,3)
+    self.rock_lod_3 = Rock.Rock(RockPlacement.output_buffers[3], 51*51,4)
     self.camera.lockObject = self.rock_lod_0
     self.camera.lockDistance = 4
     self.camera.move_hook = lambda x: \
