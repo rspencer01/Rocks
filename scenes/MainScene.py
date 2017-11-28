@@ -57,7 +57,11 @@ class MainScene(Scene):
     self.timercount += 1
 
     if self.timercount % 5 == 0:
-      RockPlacement.update(self.camera.position)
+      counts = RockPlacement.update(self.camera.position)
+      self.rock_lod_0.instance_count = counts[0]
+      self.rock_lod_1.instance_count = counts[1]
+      self.rock_lod_2.instance_count = counts[2]
+      self.rock_lod_3.instance_count = counts[3]
     # Simply move the sun around the sky
     sd = np.array(
       [np.sin(self.time),

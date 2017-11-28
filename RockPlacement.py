@@ -28,8 +28,10 @@ def initialise(buffer_sizes):
     output_buffers.append(output_buffer)
 
 def update(centre):
+  counts = []
   for i in xrange(len(render_ids)):
     transform_shader['scan'] = int(input_sizes[i]**0.5)
     transform_shader['lodlevel'] = i
     transform_shader['centre'] = np.array([centre[0],centre[2]])
-    count = transform_shader.draw(gl.GL_POINTS, render_ids[i],output_buffers[i], input_sizes[i])
+    counts.append(transform_shader.draw(gl.GL_POINTS, render_ids[i],output_buffers[i], input_sizes[i]))
+  return counts
