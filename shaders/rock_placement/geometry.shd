@@ -7,6 +7,8 @@ out mat4 outValue;
 
 uniform int lodlevel;
 uniform vec2 centre = vec2(0);
+uniform vec3 CameraDirection;
+uniform vec3 CameraPosition;
 
 #include shaders/includes/simplex.shd;
 #include shaders/includes/transforms.shd;
@@ -23,22 +25,25 @@ bool should_make()
     if (abs(geoValue[0].x-rcentre.x)<3*3/2+1 &&
         abs(geoValue[0].y-rcentre.y)<3*3/2+1)
       return false;
-    return true;
   }
   if (lodlevel==2)
   {
     if (abs(geoValue[0].x-rcentre.x)<3*9/2+1 &&
         abs(geoValue[0].y-rcentre.y)<3*9/2+1)
       return false;
-    return true;
   }
   if (lodlevel==3)
   {
     if (abs(geoValue[0].x-rcentre.x)<3*21/2+1 &&
         abs(geoValue[0].y-rcentre.y)<3*21/2+1)
       return false;
-    return true;
   }
+  if (length(geoValue[0].xy-rcentre.xy)< 4)
+    return true;
+  if (dot(normalize(vec3(geoValue[0].x,0,geoValue[0].y)-
+                    vec3(rcentre.x, CameraPosition.y, rcentre.y)),
+          normalize(CameraDirection)) < 0.5)
+    return false;
   return true;
 }
 
