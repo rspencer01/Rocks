@@ -1,4 +1,5 @@
 import numpy as np
+import dent.assets
 import procgen.Rock
 import dent.Shaders as Shaders
 import dent.transforms
@@ -12,7 +13,8 @@ class Rock(object):
 
     self.shader = shader
 
-    self.meshdata, self.meshindices = procgen.Rock.get_rock_mesh(1,detail)
+    self.meshdata, self.meshindices = dent.assets.getAsset('rock'+str(detail),
+        procgen.Rock.get_rock_mesh, (1, detail))
 
     self.instance_template = np.zeros(0, dtype=[("model", np.float32, (4, 4))])
 
