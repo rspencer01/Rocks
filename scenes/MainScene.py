@@ -1,28 +1,26 @@
-import RockPlacement
-from dent.Scene import Scene
-import dent.Texture as Texture
-from dent.Object import Object
-from dent.RenderStage import RenderStage
-from dent.RectangleObjects import RectangleObject, BlankImageObject
-from dent.ActionController import ActionController
-import dent.Shaders
-from dent.Shadows import Shadows
+import OpenGL.GL as gl
 import numpy as np
-import dent.transforms
-import dent.messaging
-import dent.args
 import random
 
-import OpenGL.GL as gl
+from dent.ActionController import ActionController
+from dent.Object import Object
+from dent.RectangleObjects import RectangleObject, BlankImageObject
+from dent.RenderStage import RenderStage
+from dent.Scene import DeferredRenderScene
+from dent.Shadows import Shadows
+import dent.Shaders
+import dent.Texture as Texture
+import dent.args
+import dent.messaging
+import dent.transforms
+
+import RockPlacement
 import Rock
 
-class MainScene(Scene):
+class MainScene(DeferredRenderScene):
   def __init__(self):
     super(MainScene, self).__init__()
     gl.glEnable(gl.GL_CULL_FACE)
-    self.renderPipeline.stages += [
-        RenderStage(render_func=self.display),
-        RenderStage(render_func=self.lighting_display   , clear_depth=False  , final_stage=True)]
 
     RockPlacement.initialise([3*3,9*9,21*21,51*51])
     self.rock_lod_0 = Rock.Rock(RockPlacement.output_buffers[0], 9,35)
@@ -74,7 +72,6 @@ class MainScene(Scene):
 
   def key(self, key):
     if key == 'l':
-      print "D"
       if self.camera.lockObject:
         self.camera.lockObject = None
       else:
