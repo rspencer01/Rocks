@@ -34,7 +34,7 @@ class MainScene(DeferredRenderScene):
     self.camera.speed = 50.
 
     self.floor = RectangleObject('floor')
-    self.sky = BlankImageObject(0.4, 0.5, 0.6)
+    self.lighting_stage.backgroundColor = np.array([0.4, 0.5, 0.6])
 
     dent.messaging.add_handler('timer', self.timer)
     dent.messaging.add_handler('keyboard', self.key)
@@ -44,11 +44,6 @@ class MainScene(DeferredRenderScene):
 
     self.shadows = Shadows(self.render_all, self.camera, rng=5)
     self.shadows.shadowCamera.rotUpDown(0.5)
-
-    self.lighting_rectangle = RectangleObject('lighting')
-    self.lighting_rectangle.shader['colormap'] = Texture.COLORMAP_NUM
-    self.lighting_rectangle.shader['normalmap'] = Texture.COLORMAP2_NUM
-    self.lighting_rectangle.shader['positionmap'] = Texture.COLORMAP3_NUM
 
   def timer(self, fps):
     self.time += 1./fps
@@ -82,7 +77,6 @@ class MainScene(DeferredRenderScene):
     dent.Shaders.setUniform('projection', projection)
 
     self.camera.render()
-    self.sky.display()
     self.render_all()
 
   def render_all(self):
@@ -91,9 +85,3 @@ class MainScene(DeferredRenderScene):
     self.rock_lod_1.display()
     self.rock_lod_2.display()
     self.rock_lod_3.display()
-
-  def lighting_display(self, previous_stage, **kwargs):
-    previous_stage.displayColorTexture.load()
-    previous_stage.displaySecondaryColorTexture.load()
-    previous_stage.displayAuxColorTexture.load()
-    self.lighting_rectangle.display()
