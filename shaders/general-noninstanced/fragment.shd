@@ -21,6 +21,8 @@ uniform int options;
 uniform vec3 sunDirection = normalize(vec3(0,1,1));
 uniform vec3 CameraPosition;
 
+#include shadows.shd;
+
 void main()
 {
   vec3 normalDetail = normalize(textureLod(normalmap, VertexOut.uv, 0).xyz-0.5);

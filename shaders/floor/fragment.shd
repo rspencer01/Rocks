@@ -7,7 +7,7 @@ out vec4 fragPos;
 uniform sampler2D colormap;
 uniform vec3 objectPos;
 
-#include shaders/includes/shadows.shd;
+#include includes/shadows.shd;
 
 void main()
 {

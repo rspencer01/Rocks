@@ -10,8 +10,8 @@ uniform vec2 centre = vec2(0);
 uniform vec3 CameraDirection;
 uniform vec3 CameraPosition;
 
-#include shaders/includes/simplex.shd;
-#include shaders/includes/transforms.shd;
+#include includes/simplex.shd;
+#include includes/transforms.shd;
 
 float rand(vec2 co){
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);

@@ -8,7 +8,7 @@ uniform sampler2D positionmap;
 
 uniform vec3 sunDirection;
 
-#include shaders/includes/shadows.shd;
+#include includes/shadows.shd;
 
 float get_lighting(vec3 pos, vec3 norm)
 {

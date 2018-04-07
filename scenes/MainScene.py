@@ -21,7 +21,7 @@ class MainScene(Scene):
     super(MainScene, self).__init__()
     gl.glEnable(gl.GL_CULL_FACE)
     self.renderPipeline.stages += [
-        RenderStage(render_func=self.display, aux_buffer=True),
+        RenderStage(render_func=self.display),
         RenderStage(render_func=self.lighting_display   , clear_depth=False  , final_stage=True)]
 
     RockPlacement.initialise([3*3,9*9,21*21,51*51])
@@ -33,7 +33,7 @@ class MainScene(Scene):
     self.camera.lockDistance = 4
     self.camera.move_hook = lambda x: \
       [x[0], max(0.5, x[1]), x[2]]
-    self.cameraSpeed = 50.
+    self.camera.speed = 50.
 
     self.floor = RectangleObject('floor')
     self.sky = BlankImageObject(0.4, 0.5, 0.6)
